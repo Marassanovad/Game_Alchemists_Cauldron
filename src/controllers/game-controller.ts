@@ -8,12 +8,14 @@ import { getRandomRecipe } from '../logic/get-random-recipe';
 interface IGameControllerProperties {
   state: IGameState;
   render: () => void;
+  updateTimer: () => void;
 }
 
-export function createGameController({ state, render }: IGameControllerProperties) {
+export function createGameController({ state, render, updateTimer }: IGameControllerProperties) {
   let timerId: ReturnType<typeof setInterval> | undefined;
   let endTime: number | undefined;
   let gameOverReason = '';
+  let isBrewing = false;
 
   function stopTimer(): void {
     clearInterval(timerId);
@@ -55,7 +57,7 @@ export function createGameController({ state, render }: IGameControllerPropertie
         return;
       }
 
-      render();
+      updateTimer();
     }, 250);
   }
 
@@ -107,47 +109,63 @@ export function createGameController({ state, render }: IGameControllerPropertie
     startGame();
   }
 
-  function brew(): void {
-    if (state.status !== 'playing' || state.cauldronIngredients.length === 0) return;
-
-    if (endTime !== undefined) {
-      state.timeLeft = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
-    }
-
-    const values = calculateCauldron(state.cauldronIngredients);
-    const success = doesRecipeMatch(values, state.currentRecipe, GAME_CONFIG.recipeTolerance);
-
-    if (success) {
-      state.score += GAME_CONFIG.scorePerBrew;
-      state.timeLeft = Math.min(
-        state.timeLeft + GAME_CONFIG.timeBonusPerBrew,
-        GAME_CONFIG.startingTime,
-      );
-
-      endTime = Date.now() + state.timeLeft * 1000;
-      state.currentRecipe = getRandomRecipe(LEVEL_ONE_DIFFICULTY);
-    } else {
-      state.lives -= 1;
-
-      if (state.lives <= 0) {
-        endGame('No lives left!');
-        return;
-      }
-
-      if (state.timeLeft <= 0) {
-        endGame('Time is up!');
-        return;
-      }
-    }
-
-    state.cauldronIngredients = [];
-
-    if (areIngredientsDepleted()) {
-      endGame('Out of ingredients!');
+  async function brew(): Promise<void> {
+    if (isBrewing || state.status !== 'playing' || state.cauldronIngredients.length === 0) {
       return;
     }
 
+    isBrewing = true;
+    state.isBrewing = true;
     render();
+
+    try {
+      await new Promise<void>((resolve) => {
+        setTimeout(resolve, 2500);
+      });
+
+      if (state.status !== 'playing') return;
+
+      if (endTime !== undefined) {
+        state.timeLeft = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+      }
+
+      const values = calculateCauldron(state.cauldronIngredients);
+      const success = doesRecipeMatch(values, state.currentRecipe, GAME_CONFIG.recipeTolerance);
+
+      if (success) {
+        state.score += GAME_CONFIG.scorePerBrew;
+        state.timeLeft = Math.min(
+          state.timeLeft + GAME_CONFIG.timeBonusPerBrew,
+          GAME_CONFIG.startingTime,
+        );
+
+        endTime = Date.now() + state.timeLeft * 1000;
+        state.currentRecipe = getRandomRecipe(LEVEL_ONE_DIFFICULTY);
+      } else {
+        state.lives -= 1;
+
+        if (state.lives <= 0) {
+          endGame('No lives left!');
+          return;
+        }
+
+        if (state.timeLeft <= 0) {
+          endGame('Time is up!');
+          return;
+        }
+      }
+
+      state.cauldronIngredients = [];
+
+      if (areIngredientsDepleted()) {
+        endGame('Out of ingredients!');
+        return;
+      }
+    } finally {
+      isBrewing = false;
+      state.isBrewing = false;
+      render();
+    }
   }
 
   return {
