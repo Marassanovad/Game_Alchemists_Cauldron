@@ -19,6 +19,7 @@ export interface ITopBarComponent {
     startingTime: number,
     isPlaying: boolean,
   ) => void;
+  updateTime: (timeLeft: number, startingTime: number) => void;
 }
 
 export function TopBar({
@@ -79,7 +80,6 @@ export function TopBar({
   timeBar.setAttribute('role', 'progressbar');
   timeBar.setAttribute('aria-label', 'Remaining time');
   timeBar.setAttribute('aria-valuemin', '0');
-  timeBar.setAttribute('aria-valuemax', String(startingTime));
 
   const timeBarFill = document.createElement('div');
   timeBarFill.className = 'top-bar__time-fill';
@@ -89,6 +89,21 @@ export function TopBar({
 
   topBar.append(scoreItem.item, timeItem, livesItem.item);
 
+  function updateTime(currentTimeLeft: number, currentStartingTime: number): void {
+    const safeTime = Math.max(0, currentTimeLeft);
+    const maxTime = Math.max(0, currentStartingTime);
+
+    const percentage = maxTime > 0 ? Math.min(100, (safeTime / maxTime) * 100) : 0;
+
+    timeValue.textContent = formatTime(safeTime);
+    timeBarFill.style.width = `${percentage}%`;
+
+    timeBar.setAttribute('aria-valuemax', String(maxTime));
+    timeBar.setAttribute('aria-valuenow', String(safeTime));
+
+    timeItem.classList.toggle('top-bar__item--critical', safeTime < 15 && safeTime > 0);
+  }
+
   function update(
     currentScore: number,
     currentTimeLeft: number,
@@ -96,27 +111,16 @@ export function TopBar({
     currentStartingTime: number,
     isCurrentPlaying: boolean,
   ): void {
-    const safeTime = Math.max(0, currentTimeLeft);
-    const maxTime = Math.max(0, currentStartingTime);
-
-    const percentage = maxTime > 0 ? Math.min(100, (safeTime / maxTime) * 100) : 0;
-
     currentlyPlaying = isCurrentPlaying;
 
     scoreItem.valueElement.textContent = String(currentScore);
-    timeValue.textContent = formatTime(safeTime);
     livesItem.valueElement.textContent = String(currentLives);
 
-    timeBarFill.style.width = `${percentage}%`;
-
-    timeBar.setAttribute('aria-valuemax', String(maxTime));
-    timeBar.setAttribute('aria-valuenow', String(safeTime));
+    updateTime(currentTimeLeft, currentStartingTime);
 
     timeIcon.src = isCurrentPlaying ? paused : timer;
     timeIconButton.setAttribute('aria-label', isCurrentPlaying ? 'Pause game' : 'Timer');
     timeIconButton.disabled = !isCurrentPlaying;
-
-    timeItem.classList.toggle('top-bar__item--critical', safeTime < 15 && safeTime > 0);
   }
 
   update(score, timeLeft, lives, startingTime, isPlaying);
@@ -124,6 +128,7 @@ export function TopBar({
   return {
     element: topBar,
     update,
+    updateTime,
   };
 }
 

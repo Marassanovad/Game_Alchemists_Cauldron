@@ -17,6 +17,7 @@ export interface IGameState {
   shelfStock: Record<string, number>;
   cauldronIngredients: IIngredient[];
   currentRecipe: IRecipe;
+  isBrewing: boolean;
 }
 
 export function createStock(ingredients: IIngredient[]): Record<string, number> {
@@ -38,5 +39,6 @@ export function createGameState(): IGameState {
     shelfStock: createStock(SHELF_INGREDIENTS),
     cauldronIngredients: [],
     currentRecipe: getRandomRecipe(LEVEL_ONE_DIFFICULTY),
+    isBrewing: false,
   };
 }

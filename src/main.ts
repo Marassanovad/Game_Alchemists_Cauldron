@@ -12,6 +12,7 @@ import { ParameterBar } from './ui/components/parameter-bar';
 import { Footer } from './ui/components/footer';
 import { GameModal } from './ui/components/game-modal';
 import { LeaderboardModal } from './ui/components/leaderboard-modal';
+import { HelpModal } from './ui/components/help-modal.ts';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
@@ -39,6 +40,9 @@ parameterBarsContainer.className = 'parameter-bars';
 const gameController = createGameController({
   state,
   render,
+  updateTimer: () => {
+    topBar.updateTime(state.timeLeft, GAME_CONFIG.startingTime);
+  },
 });
 
 const topBar = TopBar({
@@ -51,7 +55,7 @@ const topBar = TopBar({
 });
 
 const footer = Footer({
-  onHelpClick: () => console.log('Open help'),
+  onHelpClick: openHelp,
   onStartGame: gameController.startGame,
   onLeaderboardClick: openLeaderboard,
   onBrewStart: () => {},
@@ -80,6 +84,7 @@ function renderCauldron(): void {
   cauldronContainer.replaceChildren(
     Cauldron({
       ingredients: state.cauldronIngredients,
+      isBrewing: state.isBrewing,
     }),
   );
 }
@@ -190,6 +195,14 @@ function openLeaderboard(): void {
   });
 
   app?.append(leaderboardOverlay);
+}
+
+function openHelp(): void {
+  const helpOverlay = HelpModal({
+    onClose: () => helpOverlay.remove(),
+  });
+
+  app?.append(helpOverlay);
 }
 
 render();

@@ -4,9 +4,10 @@ import { GAME_CONFIG } from '../../state/game-state';
 
 interface ICauldronProperties {
   ingredients: IIngredient[];
+  isBrewing: boolean;
 }
 
-export function Cauldron({ ingredients }: ICauldronProperties): HTMLDivElement {
+export function Cauldron({ ingredients, isBrewing }: ICauldronProperties): HTMLDivElement {
   const container = document.createElement('div');
   container.className = 'cauldron';
 
@@ -14,15 +15,23 @@ export function Cauldron({ ingredients }: ICauldronProperties): HTMLDivElement {
     container.classList.add('cauldron--active');
   }
 
+  if (isBrewing) {
+    container.classList.add('cauldron--brewing');
+  }
+
   const imageContainer = document.createElement('div');
   imageContainer.className = 'cauldron__image-container';
+
+  const magicEffect = document.createElement('div');
+  magicEffect.className = 'cauldron__magic-effect';
+  magicEffect.setAttribute('aria-hidden', 'true');
 
   const image = document.createElement('img');
   image.className = 'cauldron__image';
   image.src = cauldronImage;
   image.alt = 'Magical alchemy cauldron';
 
-  imageContainer.append(image);
+  imageContainer.append(magicEffect, image);
 
   const ingredientsList = document.createElement('div');
   ingredientsList.className = 'cauldron__ingredients';
