@@ -1,0 +1,29 @@
+@use '../tokens' as *;
+
+.ingredients-shelf {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  padding: $spacing-4;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-anchor: none;
+
+  background: $color-surface;
+  border: $border-width solid $color-border;
+  border-radius: $radius-lg;
+
+  scrollbar-color: $color-border $color-surface;
+  scrollbar-width: thin;
+
+  &--blocked {
+    cursor: not-allowed;
+  }
+}
