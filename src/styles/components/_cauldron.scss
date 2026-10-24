@@ -1,0 +1,176 @@
+@use '../tokens' as *;
+
+.cauldron {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  &__image-container {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  &__image {
+    position: relative;
+    z-index: 1;
+
+    display: block;
+
+    width: 100%;
+    max-width: 380px;
+    height: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+  }
+
+  &__magic-effect {
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+
+    width: min(85%, 320px);
+    aspect-ratio: 1;
+
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+
+    &::before,
+    &::after {
+      position: absolute;
+      inset: 0;
+
+      content: '';
+      border: 2px solid $color-magic-fuchsia;
+      border-radius: 50%;
+
+      box-shadow:
+        0 0 12px $color-amethyst,
+        inset 0 0 12px $color-amethyst;
+    }
+
+    &::after {
+      inset: 10%;
+      border-color: $color-accent;
+
+      box-shadow:
+        0 0 16px $color-accent,
+        inset 0 0 10px $color-accent;
+    }
+  }
+
+  &--brewing {
+    .cauldron__magic-effect {
+      animation: magic-collapse 3.5s ease-in-out forwards;
+
+      &::before {
+        animation: magic-ring-pulse 3.5s ease-in-out forwards;
+      }
+
+      &::after {
+        animation: magic-ring-pulse 3.5s ease-in-out forwards;
+        animation-delay: 0.15s;
+      }
+    }
+  }
+
+  &__ingredients {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__ingredient {
+    display: flex;
+    flex: 0 0 $button-icon;
+    align-items: center;
+    justify-content: center;
+
+    width: $button-icon;
+    height: $button-icon;
+
+    background: $color-surface;
+    border: $border-width solid $color-border;
+    border-radius: $radius-lg;
+
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
+
+    &--empty {
+      border-style: dashed;
+      opacity: 0.55;
+    }
+  }
+
+  &__ingredient-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+}
+
+@keyframes magic-collapse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  15% {
+    opacity: 0.75;
+  }
+
+  70% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
+
+@keyframes magic-ring-pulse {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 90deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cauldron--brewing {
+    .cauldron__magic-effect,
+    .cauldron__magic-effect::before,
+    .cauldron__magic-effect::after {
+      animation-duration: 0.01ms;
+    }
+  }
+}

@@ -1,0 +1,69 @@
+@use '../tokens' as *;
+
+.ingredient-tooltip {
+  position: fixed;
+  z-index: 1000;
+  top: calc(100% + $spacing-6);
+  left: calc(100% + $spacing-2);
+  width: 240px;
+  padding: $spacing-4;
+
+  color: $color-text-primary;
+  background: $color-surface;
+  border: $border-width solid $color-accent;
+  border-radius: $radius-md;
+
+  transform: translateY(-50%);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    opacity $transition-fast,
+    visibility $transition-fast;
+
+  &__title {
+    margin: 0 0 $spacing-2;
+    font-size: $font-size-lg;
+  }
+
+  &__description {
+    margin: 0 0 $spacing-3;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    line-height: 1.5;
+  }
+
+  &__parameters {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__parameter {
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-3;
+    margin: 0;
+    font-size: $font-size-sm;
+
+    &--temperature {
+      color: $color-temperature;
+    }
+
+    &--density {
+      color: $color-density;
+    }
+
+    &--magic {
+      color: $color-magic-power;
+    }
+  }
+
+  hr {
+    width: 100%;
+    margin: $spacing-3 0;
+    border: 0;
+    border-top: $border-width solid $color-border;
+  }
+}

@@ -1,0 +1,89 @@
+@use './tokens' as *;
+
+@use './components/_ingredient-card';
+@use './components/_ingredient-tooltip';
+@use './components/_ingredients-shelf';
+@use './components/_cauldron';
+@use './components/_top-bar';
+@use './components/_recipe-panel';
+@use './components/_parameter-bar';
+@use './components/_footer';
+@use './components/_game-modal';
+@use './components/_leaderboard-modal';
+@use './components/_help-modal';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  color: $color-text-primary;
+  background: $color-bg;
+  font-family: $font-family-base;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  gap: $spacing-3;
+
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  padding: $spacing-4 $spacing-5;
+}
+
+.ingredients-shelf-container,
+.cauldron-container,
+.recipe-panel-container {
+  min-width: 0;
+  min-height: 0;
+}
+
+.ingredients-shelf-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cauldron-container,
+.recipe-panel-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredients-shelf {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.parameter-bars {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  width: 100%;
+  padding-inline: $spacing-5;
+}

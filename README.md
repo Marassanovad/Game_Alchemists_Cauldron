@@ -1,4 +1,3 @@
-
 # Game Alchemist's Cauldron
 
 A browser-based alchemy game developed as part of the Rolling Scopes School qualifying stage.

@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+commit_message=$(head -n 1 "$1")
+
+if ! printf '%s\n' "$commit_message" | grep -Eq '^(init|feat|fix|refactor|docs|style|test|chore|perf|build)(\([a-z0-9-]+\))?: [a-z].*[^.]$'; then
+  echo "Invalid commit message."
+  echo "Use: type: description"
+  echo "Example: refactor: configure husky hooks"
+  exit 1
+fi

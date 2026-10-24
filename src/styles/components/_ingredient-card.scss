@@ -1,0 +1,104 @@
+@use '../tokens' as *;
+
+.ingredient-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-1;
+  width: 100%;
+  padding: $spacing-3;
+
+  color: $color-text-primary;
+  background: $color-surface;
+  border: $border-width solid $color-border;
+  border-radius: $radius-md;
+
+  transition:
+    border-color $transition-base,
+    opacity $transition-base,
+    filter $transition-base;
+
+  &:hover:not(:disabled),
+  &:focus-within {
+    border-color: $color-accent;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+  }
+
+  &__parameters {
+    display: flex;
+    gap: $spacing-1;
+  }
+
+  &__parameter {
+    width: 48px;
+    padding: $spacing-1;
+    border: $border-width solid $color-border;
+    border-radius: $radius-md;
+  }
+
+  &__stock {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    background: $color-bg;
+    border: $border-width solid $color-success;
+    border-radius: $radius-full;
+  }
+
+  &__stock-value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+  }
+
+  &__stock-label {
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+  }
+
+  &--empty {
+    opacity: 0.4;
+    filter: grayscale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingredient-card {
+    transition: none;
+  }
+}
