@@ -1,0 +1,159 @@
+@use '../tokens' as *;
+
+.parameter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  width: 100%;
+  padding: $spacing-3;
+
+  background: $color-surface;
+  border: $border-width solid $color-border;
+  border-radius: $radius-lg;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-2;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: $spacing-2;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    font-size: $icon-sm + 4px;
+    color: inherit;
+  }
+
+  &__label {
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+  }
+
+  &__value {
+    flex-shrink: 0;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__track {
+    position: relative;
+    height: 12px;
+    margin-top: $spacing-5 - $spacing-1;
+
+    background: linear-gradient(to right, #70d5ff, #ff5252);
+    border: $border-width solid $color-border;
+    border-radius: $radius-lg;
+  }
+
+  &__range {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 40%;
+    width: 20%;
+
+    background: $color-success;
+    border-inline: 2px dotted $color-surface;
+    box-shadow: 0 0 8px rgb(68 234 119 / 45%);
+  }
+
+  &--in-range {
+    .parameter-bar__range {
+      background: #a6ffb5;
+      border-color: #fff1b8;
+      box-shadow:
+        0 0 6px #7dff9b,
+        0 0 14px rgb(88 255 130 / 85%),
+        0 0 24px rgb(255 220 130 / 55%);
+    }
+  }
+
+  &--temperature &__track {
+    background: linear-gradient(to right, #65d9ff, #4268c9, #ff5252);
+  }
+
+  &--density &__track {
+    background: linear-gradient(
+      to right,
+      #17151d 0%,
+      #315b83 15%,
+      #62d8ff 50%,
+      #315b83 85%,
+      #17151d 100%
+    );
+  }
+
+  &--magic-power &__track {
+    background: linear-gradient(
+      to right,
+      #17151d 0%,
+      #643b91 10%,
+      #a66cff 50%,
+      #643b91 90%,
+      #17151d 100%
+    );
+  }
+
+  &__marker {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: left $transition-base;
+  }
+
+  &__marker-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    color: currentColor;
+    font-size: $font-size-md;
+    line-height: 1;
+
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 35%));
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__range-label {
+    font-size: $font-size-xs;
+    color: $color-text-primary;
+    opacity: 0.7;
+  }
+
+  &--temperature {
+    color: $color-temperature;
+  }
+
+  &--density {
+    color: $color-density;
+  }
+
+  &--magic-power {
+    color: $color-magic-power;
+  }
+
+  &__label,
+  &__value {
+    color: $color-text-primary;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parameter-bar__marker {
+    transition: none;
+  }
+}
